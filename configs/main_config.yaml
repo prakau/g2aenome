@@ -1,0 +1,66 @@
+# G²AENome Main Configuration
+
+# --- Path Configurations ---
+# Base directory for all data operations. Can be relative to project root or absolute.
+# Example: data_base_dir: "data"
+data_base_dir: "data"
+
+# Subdirectories for specific data types
+# These paths are typically relative to data_base_dir or project root.
+publications_dir: "publications_dr_kaushik" # Directory containing Dr. Kaushik's publications (PDFs)
+genomic_data_dir: "genomic_data_samples"    # Directory for sample FASTA, GFF files
+
+# Output directories for processed data, models, and artifacts
+# These paths are typically relative to the project root.
+output_base_dir: "outputs"
+knowledge_graph_dir: "knowledge_graph" # Where KG data (e.g., graphml, pickle) will be saved
+vector_store_dir: "vector_store"       # Where vector store index (e.g., FAISS index) will be saved
+processed_text_dir: "processed_text"   # For storing intermediate text chunks, etc.
+
+# --- Logging Configuration ---
+logging:
+  level: "INFO"  # Standard Python logging levels: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  # Log file configuration (optional, loguru can also log to console)
+  log_file_path: "logs/g2aenome_pipeline.log" # Relative to project root
+  rotation: "10 MB" # e.g., "500 MB", "1 week", "midnight"
+  retention: "10 days" # e.g., "1 month"
+  format: "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+
+# --- Data Processing Parameters ---
+pdf_processing:
+  # Options for text chunking
+  chunk_size: 1000       # Target size for text chunks (e.g., characters or tokens depending on method)
+  chunk_overlap: 200     # Overlap between consecutive chunks
+  # Semantic chunking can be enabled if a suitable strategy is implemented
+  # semantic_chunking_enabled: false
+
+genomic_processing:
+  # Specific parameters for FASTA/GFF parsing if needed
+  # e.g., feature_types_to_extract: ["gene", "mRNA", "CDS"]
+  default_organism: "Unknown"
+
+# --- Knowledge Graph Parameters ---
+knowledge_graph:
+  # File name for saving/loading the graph (within knowledge_graph_dir)
+  graph_file_name: "g2aenome_kg.graphml" # or .pkl for networkx pickling
+  # Default node/edge properties or types if not specified during creation
+  default_node_type: "Concept"
+  default_edge_type: "RELATED_TO"
+
+# --- Vector Store Parameters ---
+vector_store:
+  # File name for saving/loading the FAISS index (within vector_store_dir)
+  index_file_name: "faiss_index.idx"
+  # Number of top-k results to retrieve in semantic search
+  default_top_k: 5
+
+# --- MLflow Configuration ---
+mlflow_tracking:
+  experiment_name: "G2Aenome_Advanced_PoC"
+  # If using a remote tracking server, set MLFLOW_TRACKING_URI in .env
+  # Otherwise, MLflow will use local ./mlruns directory.
+
+# --- Application (Streamlit/FastAPI) Specifics ---
+# app_settings:
+  # title: "G²AENome: Genomic & Agri-Phenomic AI Nexus"
+  # description: "Advanced PoC for Dr. Prashant Kaushik"

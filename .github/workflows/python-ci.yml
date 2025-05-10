@@ -1,0 +1,67 @@
+# GitHub Actions CI Workflow for G²AENome Python Project
+
+name: Python CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        # Install spacy models (example, adjust if models_config.yaml specifies others)
+        # python -m spacy download en_core_sci_lg # This might be large for CI
+        # For CI, consider using smaller models or mocking model loading in tests
+        # pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.3/en_core_sci_sm-0.5.3.tar.gz
+
+
+    # Placeholder for linting (e.g., with flake8 or pylint)
+    # - name: Lint with flake8
+    #   run: |
+    #     pip install flake8
+    #     # stop the build if there are Python syntax errors or undefined names
+    #     flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    #     # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+    #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Run tests with pytest
+      run: |
+        pip install pytest pytest-cov
+        # Ensure PYTHONPATH is set if src is not automatically discoverable
+        # export PYTHONPATH=./src:$PYTHONPATH
+        pytest tests/ --cov=src --cov-report=xml --cov-report=html
+
+    # Placeholder for building the package (if applicable)
+    # - name: Build package
+    #   run: |
+    #     python setup.py sdist bdist_wheel
+
+    # Placeholder for uploading coverage reports (e.g., to Codecov)
+    # - name: Upload coverage to Codecov
+    #   uses: codecov/codecov-action@v3
+    #   with:
+    #     token: ${{ secrets.CODECOV_TOKEN }} # Optional: if you have a private repo or want to ensure uploads
+    #     files: ./coverage.xml,./htmlcov/*
+    #     fail_ci_if_error: true

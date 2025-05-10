@@ -1,0 +1,99 @@
+# G²AENome Models Configuration
+
+# --- Entity Recognition (NER) Models ---
+# spaCy models are commonly used.
+# Specify the model name to be loaded by spaCy.
+# Examples: "en_core_web_lg", "en_core_web_trf"
+# For biomedical/scientific text, scispaCy models are recommended:
+# "en_core_sci_sm", "en_core_sci_md", "en_core_sci_lg"
+# "en_ner_craft_md", "en_ner_jnlpba_md", "en_ner_bc5cdr_md", "en_ner_bionlp13cg_md"
+# Ensure the chosen model is installed in your environment (see requirements.txt).
+entity_recognition:
+  spacy_model_name: "en_core_sci_lg" # Default to a large scispaCy model
+  # Custom entity labels relevant to the domain (used for training or post-processing)
+  # These are examples; refine based on Dr. Kaushik's specific focus.
+  target_entity_labels:
+    - "GENE"
+    - "PROTEIN"
+    - "CROP_SPECIES" # e.g., Solanum melongena, Oryza sativa, Triticum aestivum
+    - "PLANT_FAMILY" # e.g., Solanaceae
+    - "TRAIT" # e.g., yield, drought tolerance, disease resistance
+    - "PHENOTYPE" # e.g., plant height, flowering time
+    - "STRESS_FACTOR" # e.g., abiotic stress, biotic stress, salinity, heat
+    - "CHEMICAL_COMPOUND" # e.g., abscisic acid, salicylic acid, specific pesticides
+    - "METHODOLOGY" # e.g., RNA sequencing, CRISPR-Cas9, mass spectrometry
+    - "PATHOGEN" # e.g., specific bacteria, fungi, viruses
+    - "PEST" # e.g., specific insects
+    - "LOCATION" # Geographical locations mentioned in studies
+    - "ORGANIZATION" # Research institutions, companies
+
+# --- Relation Extraction (RE) Models ---
+# This section is for more advanced RE.
+# Option 1: Rule-based (handled in code, no specific model here)
+# Option 2: Transformer-based RE model from HuggingFace Hub
+relation_extraction:
+  # Specify a HuggingFace model name if using a pre-trained RE transformer.
+  # This requires 'transformers' library.
+  # Example: "dmis-lab/biobert-base-cased-v1.1-squad" (general bio, for QA, adapt for RE)
+  # Or a model specifically fine-tuned for relation extraction on biomedical/agricultural text.
+  # Example: " κάποιος/bert-large-relation-extraction " (fictional, replace with real)
+  # Example: "tplinker/tplinker-nyt" (general domain, for TPLinker architecture)
+  # Example for biomedical (often requires specific input formatting): "dmis-lab/biobert-large-cased-v1.1-squad" (QA model, needs adaptation for RE)
+  # For this PoC, let's use a placeholder that suggests a common RE task setup.
+  # A common approach is to frame RE as sentence classification or token classification.
+  # We'll use a placeholder name and assume it's a pipeline-compatible model.
+  hf_model_name: "ynie/roberta-large-snli_mnli_fever_anli_R1_R2_R3-nli" # Example NLI model, can be adapted for RE tasks. Or a dedicated RE model.
+  # Define relation types you aim to extract.
+  # These should align with the capabilities of the chosen model or rule-based logic.
+  target_relation_types:
+    - "ASSOCIATED_WITH" # General association (e.g., gene-trait)
+    - "REGULATES" # (e.g., gene-gene, protein-gene)
+    - "EXPRESSED_IN" # (e.g., gene-tissue, gene-species)
+    - "CAUSES" # (e.g., stressor-phenotype, pathogen-disease)
+    - "TREATS" # (e.g., chemical-disease)
+    - "PART_OF" # (e.g., gene-pathway)
+    - "INTERACTS_WITH" # (e.g., protein-protein)
+    - "LOCATION_OF" # (e.g., gene-chromosome)
+    - "STUDIED_IN" # (e.g., trait-crop_species)
+
+# --- Sentence Embedding Models (for Vector Store) ---
+# Specify a sentence-transformer model from HuggingFace Hub.
+# Ensure the chosen model is installed or will be downloaded.
+# General purpose: "sentence-transformers/all-mpnet-base-v2", "sentence-transformers/all-MiniLM-L6-v2"
+# Biomedical specific (might require research for best fit for sentence similarity):
+# "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext" (primarily for BERT tasks, but can be adapted)
+# "pritamdeka/BioBERT-mnli-snli-scinli-scitail-mednli-stsb" (BioBERT fine-tuned on NLI tasks)
+embedding_model:
+  hf_model_name: "sentence-transformers/all-mpnet-base-v2" # A strong general-purpose model
+  # Dimensionality of the embeddings produced by the model (for FAISS index setup)
+  # all-mpnet-base-v2 produces 768-dimensional embeddings.
+  # all-MiniLM-L6-v2 produces 384-dimensional embeddings.
+  # Check the specific model's documentation.
+  embedding_dim: 768 # For all-mpnet-base-v2
+
+# --- Large Language Models (LLMs for Agent) ---
+# Configuration for the LLM used by the LangChain agent.
+llm:
+  # Provider: "OpenAI", "HuggingFaceEndpoint", "HuggingFaceHub", "AzureOpenAI", etc.
+  provider: "HuggingFaceEndpoint" # Example for a self-hosted or API-accessible HF model
+  # If provider is "OpenAI":
+  # openai_model_name: "gpt-3.5-turbo-instruct" # or "gpt-4", "text-davinci-003" etc.
+  # openai_api_key: "YOUR_OPENAI_API_KEY" # Best practice: use .env file
+
+  # If provider is "HuggingFaceEndpoint":
+  # endpoint_url: "YOUR_HUGGINGFACE_INFERENCE_ENDPOINT_URL"
+  # hf_token: "YOUR_HUGGINGFACE_API_TOKEN" # Best practice: use .env file for tokens
+
+  # If provider is "HuggingFaceHub" (for models directly on the Hub):
+  repo_id: "mistralai/Mixtral-8x7B-Instruct-v0.1" # Example of a powerful open model
+  # task: "text-generation"
+  # model_kwargs:
+  #   temperature: 0.7
+  #   max_length: 1024 # Or max_new_tokens for some models
+
+  # General LLM parameters
+  temperature: 0.1 # Low temperature for more factual, less creative responses from agent
+  max_tokens: 2048 # Max tokens for the LLM response in the agent
+
+# It's recommended to use environment variables for API keys (OPENAI_API_KEY, HUGGINGFACE_API_TOKEN)
+# and refer to them here if needed, or let LangChain pick them up automatically.
