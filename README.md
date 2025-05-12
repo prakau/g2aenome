@@ -1,8 +1,7 @@
-# G²AENome (Genomic & Agri-Phenomic AI Nexus) - Dr. Prashant Kaushik Advanced PoC
-
+# G²AENome (Genomic & Agri-Phenomic AI Nexus)
 ## Project Vision: Accelerating Agricultural Biotechnology Discovery
 
-**G²AENome** aims to be a transformative, multi-modal, generative AI-powered platform designed to accelerate discovery in agricultural biotechnology. This initiative is deeply rooted in the extensive expertise of **Dr. Prashant Kaushik**, a distinguished figure in genomics, molecular biology, bioinformatics, and agricultural innovation. With over 350 publications, 12 books, numerous patents, and a significant scholarly impact (Google Scholar h-index 35, i10-index 125), Dr. Kaushik's work provides a rich foundation for this project. His research spans critical areas such as RNA sequencing, biomarker analysis, and studies on vital crops like eggplant, tomato, and rice, particularly concerning stress response and agricultural improvement.
+**G²AENome** aims to be a transformative, multi-modal, generative AI-powered platform designed to accelerate discovery in agricultural biotechnology. 
 
 The G²AENome platform envisions a future where researchers can rapidly synthesize information from vast datasets—genomic sequences, phenomic data, and the entire corpus of scientific literature—to uncover novel insights, predict gene function, identify stress-resilient traits, and ultimately contribute to global food security and sustainable agriculture.
 
@@ -13,14 +12,14 @@ This repository, **`g2aenome_dr_kaushik_adv_poc`**, represents an **Advanced Pro
 This Advanced PoC showcases the following key components and capabilities:
 
 1.  **Multi-Modal Data Fabric:**
-    *   Ingestion and processing of Dr. Kaushik's publications (PDFs) to extract textual knowledge.
+    *   Ingestion and processing to extract textual knowledge.
     *   Parsing and structuring of sample genomic data (FASTA, GFF) for crops like eggplant and tomato.
 
 2.  **Advanced Knowledge Services:**
     *   **Entity Recognition:** Utilizes advanced NLP models (e.g., `scispaCy`) to identify key biological and agricultural entities (genes, proteins, crop species, traits, stress factors) from processed text.
     *   **Relation Extraction:** Implements mechanisms to identify and extract relationships between these entities (e.g., gene-regulates-gene, crop-exhibits-trait, stressor-affects-gene), moving beyond simple co-occurrence to more structured relational data.
     *   **Knowledge Graph Construction:** Builds a `networkx`-based knowledge graph, integrating entities and relations from both literature and genomic data. This serves as a structured, queryable representation of domain knowledge.
-    *   **Vector Store Management:** Creates a semantic search index (using `sentence-transformers` and `FAISS`) from text chunks, enabling powerful similarity-based retrieval of information from Dr. Kaushik's work.
+    *   **Vector Store Management:** Creates a semantic search index (using `sentence-transformers` and `FAISS`) from text chunks, enabling powerful similarity-based retrieval of information.
 
 3.  **Intelligent Agent Core (LangChain-Powered):**
     *   A modular LangChain agent equipped with **custom tools** for:
@@ -44,7 +43,7 @@ This PoC is designed to handle queries like the following, demonstrating its int
 > *"Drawing from Dr. Kaushik's publications on Solanum melongena (eggplant) and its response to abiotic stress, identify key genes involved. For each gene, list its documented functions from the knowledge graph and provide summaries of relevant text segments from his papers retrieved via semantic search."*
 
 The G²AENome agent would:
-1.  Use semantic search to find relevant sections in Dr. Kaushik's papers discussing *Solanum melongena* and abiotic stress.
+1.  Use semantic search to find relevant sections.
 2.  Extract gene names (entities) from these sections.
 3.  Query the knowledge graph for these genes to find their known functions and relationships (e.g., involvement in stress response pathways, interactions with other genes/proteins).
 4.  Synthesize this information, providing a list of genes, their functions (from KG), and supporting evidence (cited text snippets from semantic search).
@@ -61,7 +60,7 @@ g2aenome_dr_kaushik_adv_poc/
 │   ├── main_config.yaml
 │   └── models_config.yaml
 ├── data/                     # Sample data
-│   ├── publications_dr_kaushik/ # Dr. Kaushik's sample PDFs
+│   ├── publications_dr_kaushik/ # Sample PDFs
 │   └── genomic_data_samples/  # Sample FASTA, GFF files
 ├── notebooks/                # Jupyter notebooks for exploration
 ├── src/                      # Source code
@@ -86,14 +85,14 @@ g2aenome_dr_kaushik_adv_poc/
 ### Prerequisites
 
 *   Python 3.8+
-*   Access to Dr. Kaushik's sample publications (PDFs) and relevant genomic data (FASTA, GFF).
+*   Access levant genomic data (FASTA, GFF).
 *   API keys (e.g., OpenAI, HuggingFace) if using proprietary models (optional, configure in `.env`).
 
 ### Installation
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your_username/g2aenome_dr_kaushik_adv_poc.git # Replace with actual URL
+    git clone https://github.com/your_username/g2aenome# Replace with actual URL
     cd g2aenome_dr_kaushik_adv_poc
     ```
 
@@ -122,7 +121,7 @@ g2aenome_dr_kaushik_adv_poc/
     ```
 
 5.  **Place sample data:**
-    *   Put sample PDF publications from Dr. Kaushik into the `data/publications_dr_kaushik/` directory.
+    *   Put sample PDF publications into the `data/publications_dr_kaushik/` directory.
     *   Place sample FASTA and GFF files (e.g., for eggplant, tomato) into the `data/genomic_data_samples/` directory.
 
 ### Running the Core Pipeline
@@ -166,7 +165,7 @@ This Advanced PoC is a stepping stone towards the full G²AENome vision. Future 
 
 ## Contribution
 
-This project is currently in its foundational stages. Contributions and collaborations aligned with Dr. Kaushik's research vision are welcome as the project matures.
+This project is currently in its foundational stages. Contributions and collaborations aligned with this research vision are welcome as the project matures.
 
 ## License
 
@@ -174,4 +173,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgements
 
-This project leverages the extensive body of work and expertise of Dr. Prashant Kaushik in agricultural biotechnology. It also builds upon the capabilities of numerous open-source libraries and the LangChain framework.
+This project leverages the extensive body of work and expertise in agricultural biotechnology. It also builds upon the capabilities of numerous open-source libraries and the LangChain framework.
